@@ -1,5 +1,5 @@
 ## =============================================================================
-# dsh-skills-mcp-manager — 一键安装脚本（Windows PowerShell 5.1+ / pwsh）
+# dsh-skills-mcp-cli-manager — 一键安装脚本（Windows PowerShell 5.1+ / pwsh）
 #
 # 通过 DSH 官方插件命令把本插件当作“普通包”安装进 profile 并自动挂载：
 #   dsh plugin --profile web add <来源>
@@ -36,16 +36,16 @@ param(
   [switch]$Help
 )
 
-$PKG = 'dsh-skills-mcp-manager'
+$PKG = 'dsh-skills-mcp-cli-manager'
 if ($Help) {
   Write-Host @'
-dsh-skills-mcp-manager 一键安装脚本（PowerShell）
+dsh-skills-mcp-cli-manager 一键安装脚本（PowerShell）
 
 用法：
   powershell -ExecutionPolicy Bypass -File scripts/install.ps1 [-Source <path|tgz|npm名>] [-Profile web] [-Restart] [-DryRun]
   Source 缺省为当前包目录。示例：
-    -Source "$PWD\dsh-skills-mcp-manager-0.1.4.tgz"
-    -Source dsh-skills-mcp-manager   # 已发布到 npm/注册表时按名字装
+    -Source "$PWD\dsh-skills-mcp-cli-manager-0.1.4.tgz"
+    -Source dsh-skills-mcp-cli-manager   # 已发布到 npm/注册表时按名字装
 '@
   exit 0
 }
@@ -89,7 +89,7 @@ else { $cliArgs = @('-y', '--package', '@deepseek-ai/dsh', 'dsh', 'plugin', '--p
 if ($DryRun) {
   Say "[dry-run] 将在 profile '$Profile'（$PROFILE_DIR）执行："
   Say "[dry-run]   $CLI plugin --profile $Profile add $Source"
-  Say '[dry-run] 然后校验 dsh.profile.bundles 包含 dsh-skills-mcp-manager'
+  Say '[dry-run] 然后校验 dsh.profile.bundles 包含 dsh-skills-mcp-cli-manager'
   if ($Restart) { Say '[dry-run] 然后 pm2 restart dsh-web' } else { Say '[dry-run] 然后提示手动重启 DSH 并硬刷新' }
   exit 0
 }
@@ -105,7 +105,7 @@ if ($addCode -ne 0) { Die "dsh plugin add 失败（退出码 $addCode）。请�
 $pkgJson = Get-Content -Raw $PKG_JSON | ConvertFrom-Json
 $bundles = @($pkgJson.dsh.profile.bundles)
 if ($bundles -notcontains $PKG) {
-  Warn 'dsh-skills-mcp-manager 未出现在 dsh.profile.bundles 中——挂载未注册。'
+  Warn 'dsh-skills-mcp-cli-manager 未出现在 dsh.profile.bundles 中——挂载未注册。'
   Warn '可能原因：来源不是本插件包 / pnpm 拦截。请检查后重试。'
   exit 1
 }

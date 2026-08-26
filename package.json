@@ -1,5 +1,5 @@
 {
-  "name": "dsh-skills-mcp-manager",
+  "name": "dsh-skills-mcp-cli-manager",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/YpipaQ/dsh-skills-mcp-cli-manager.git"

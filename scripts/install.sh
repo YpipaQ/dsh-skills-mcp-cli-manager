@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# dsh-skills-mcp-manager — 一键安装脚本（macOS / Linux / Git Bash）
+# dsh-skills-mcp-cli-manager — 一键安装脚本（macOS / Linux / Git Bash）
 # 用法：
 #   bash scripts/install.sh                 # 默认安装当前包目录
 #   bash scripts/install.sh <source>        # 指定来源（本地目录 / tgz / npm 名）
@@ -11,7 +11,7 @@
 # 包名与 cordis.patch.yml 不一致）。本包装了 dsh.bundle.patch（cordis.patch.yml）。
 set -euo pipefail
 
-PKG="dsh-skills-mcp-manager"
+PKG="dsh-skills-mcp-cli-manager"
 PROFILE="web"
 RESTART=0
 DRYRUN=0

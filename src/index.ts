@@ -1,5 +1,5 @@
 /**
- * dsh-skills-mcp-manager — host half. Mounts the skills filesystem engine,
+ * dsh-skills-mcp-cli-manager — host half. Mounts the skills filesystem engine,
  * the MCP connection manager (real @deepseek-ai/dsh-mcp-client instances per
  * enabled server), the /api/dsh-skills-mcp route family, and a system-prompt
  * announcement. The browser half (./client) renders the settings card.
@@ -53,7 +53,7 @@ const DEFAULT_ANNOUNCE = true
 const SECTION_ORDER = 160
 
 /** Model-facing announcement: plugin presence, capabilities, and limits. */
-export const SKILLS_MCP_GUIDANCE = '本机已安装 dsh-skills-mcp-manager 插件（技能中心：技能 / MCP / CLI 管理器）：设置页「Web UI 插件 → 技能中心」。能力：浏览/启用/禁用/删除/导入技能（项目级 .dsh/skills、.agents/skills 与用户级 ~/.dsh/skills、~/.agents/skills）；管理 MCP 服务器（stdio 与 streamable-http）；以及本地 CLI 工具清单与状态（发现 skill 内嵌的 CLI 包装脚本如 scripts/run-cli、以及系统 CLI 如 gh/git/tencent-news-cli，报告是否安装/版本/需更新/子命令/API-Key 状态）。MCP 是真实连接：启用的服务器经 @deepseek-ai/dsh-mcp-client 真正连接并把工具注册为 mcp__<server>__<tool>，启用/禁用会实际连接/断开。限制：MCP 服务器配置存 ~/.dsh/mcp.json（密码/env 明文、权限 0600 由用户自行保证）；CLI 注册表存 ~/.dsh/cli.json；技能启用/禁用通过改写 SKILL.md 前言实现；删除为物理删除，不可恢复。用户提到「技能管理 / 技能导入 / MCP 服务器 / MCP 连接 / CLI 工具 / CLI 状态」时即指本插件，请据此协作。'
+export const SKILLS_MCP_GUIDANCE = '本机已安装 dsh-skills-mcp-cli-manager 插件（技能中心：技能 / MCP / CLI 管理器）：设置页「Web UI 插件 → 技能中心」。能力：浏览/启用/禁用/删除/导入技能（项目级 .dsh/skills、.agents/skills 与用户级 ~/.dsh/skills、~/.agents/skills）；管理 MCP 服务器（stdio 与 streamable-http）；以及本地 CLI 工具清单与状态（发现 skill 内嵌的 CLI 包装脚本如 scripts/run-cli、以及系统 CLI 如 gh/git/tencent-news-cli，报告是否安装/版本/需更新/子命令/API-Key 状态）。MCP 是真实连接：启用的服务器经 @deepseek-ai/dsh-mcp-client 真正连接并把工具注册为 mcp__<server>__<tool>，启用/禁用会实际连接/断开。限制：MCP 服务器配置存 ~/.dsh/mcp.json（密码/env 明文、权限 0600 由用户自行保证）；CLI 注册表存 ~/.dsh/cli.json；技能启用/禁用通过改写 SKILL.md 前言实现；删除为物理删除，不可恢复。用户提到「技能管理 / 技能导入 / MCP 服务器 / MCP 连接 / CLI 工具 / CLI 状态」时即指本插件，请据此协作。'
 
 /**
  * Mount the skills engine, MCP manager, routes, and announcement.

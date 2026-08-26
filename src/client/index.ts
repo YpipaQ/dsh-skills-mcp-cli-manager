@@ -1,5 +1,5 @@
 /**
- * Browser-half entry for the dsh-skills-mcp-manager plugin — runs inside the
+ * Browser-half entry for the dsh-skills-mcp-cli-manager plugin — runs inside the
  * dsh web GUI. Registers the locale dictionary and contributes a first-class
  * settings PAGE (a settings.section entry, a sibling of the Plugins page),
  * not a card inside any group. The page hosts the skills/MCP management UI,
@@ -30,7 +30,7 @@ const NS = 'skills-mcp-manager'
 
 declare module '@deepseek-ai/dsh-client-ui-slots' {
   interface LocaleNamespaceMap {
-    /** dsh-skills-mcp-manager surface copy. */
+    /** dsh-skills-mcp-cli-manager surface copy. */
     'skills-mcp-manager': SkillsMcpKey
   }
 }

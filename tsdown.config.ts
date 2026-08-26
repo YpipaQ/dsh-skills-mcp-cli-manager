@@ -1,5 +1,5 @@
 /**
- * Standalone tsdown config for dsh-skills-mcp-manager.
+ * Standalone tsdown config for dsh-skills-mcp-cli-manager.
  *
  * The repository only ships src/ + the built lib/, so this reconstructs the
  * two-half build the bundle needs: the Host node half (lib/index.js) and the
@@ -146,7 +146,7 @@ function clientConfig(id: string): UserConfig {
   }
 }
 
-const ID = 'dsh-skills-mcp-manager'
+const ID = 'dsh-skills-mcp-cli-manager'
 
 /** tsdown entry: build both halves in one run (single default face). */
 export default (_inlineConfig: Pick<UserConfig, 'env'>): UserConfig[] => {

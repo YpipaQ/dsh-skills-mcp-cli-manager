@@ -10,7 +10,7 @@
   <a href="https://opensource.org/licenses/MIT"><img alt="DSH" src="https://img.shields.io/badge/DSH-0.1.0--rc%2B-4d6bfe" /></a>
 </div>
 
-# dsh-skills-mcp-manager
+# dsh-skills-mcp-cli-manager
 
 > **Skills Center** — a self-contained DSH web plugin that adds a first-class **settings page** for the
 > three agent tool families: **Skills**, **MCP servers**, and **local CLI tools**.
@@ -42,15 +42,15 @@ One settings page (「Web UI 插件 → 技能中心」) that manages the agent'
 > `cordis.patch.yml`; both break DSH startup.
 
 ```sh
-# From npm (when published): https://www.npmjs.com/package/dsh-skills-mcp-manager
-dsh plugin --profile web add dsh-skills-mcp-manager
-# or: npm install dsh-skills-mcp-manager
+# From npm (when published): https://www.npmjs.com/package/dsh-skills-mcp-cli-manager
+dsh plugin --profile web add dsh-skills-mcp-cli-manager
+# or: npm install dsh-skills-mcp-cli-manager
 
 # From source (this repo / after cloning)
 dsh plugin --profile web add <absolute path to this folder>
 
 # Or the built tarball
-dsh plugin --profile web add <path>/dsh-skills-mcp-manager-<version>.tgz
+dsh plugin --profile web add <path>/dsh-skills-mcp-cli-manager-<version>.tgz
 
 # Or the convenience scripts
 bash scripts/install.sh                                        # macOS / Linux / Git Bash
@@ -77,7 +77,7 @@ Runtime state:
 ## 🗂️ Repository structure
 
 ```
-dsh-skills-mcp-manager/
+dsh-skills-mcp-cli-manager/
 ├── src/                # TypeScript source (host + client halves)
 │   ├── index.ts        # host entry (plug-in load, settings namespace, agent announcement)
 │   ├── skills.ts       # skills filesystem engine
