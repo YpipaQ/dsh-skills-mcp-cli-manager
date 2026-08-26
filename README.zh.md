@@ -5,7 +5,7 @@
 <div align="center">
   <b style="font-size: 1.15em;">一个 DeepSeek Harness (DSH) Web 插件：在同一天设置页里管理「技能 + MCP + CLI」三类 agent 工具。</b><br /><br />
   <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
-  <a href="https://github.com/zebbkira/dsh-skills-mcp-manager"><img alt="upstream" src="https://img.shields.io/badge/upstream-YpipaQ%2Fmy--dsh--plugin-4d6bfe" /></a>
+  <a href="https://github.com/zebbkira/dsh-skills-mcp-manager"><img alt="upstream" src="https://img.shields.io/badge/upstream-zebbkira%2Fdsh--skills--mcp--manager-4d6bfe" /></a>
   <a href="https://github.com/zebbkira/dsh-skills-mcp-manager/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/zebbkira/dsh-skills-mcp-manager" /></a>
   <a href="https://opensource.org/licenses/MIT"><img alt="DSH" src="https://img.shields.io/badge/DSH-0.1.0--rc%2B-4d6bfe" /></a>
 </div>

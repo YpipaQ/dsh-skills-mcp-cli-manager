@@ -5,7 +5,7 @@
 <div align="center">
   <b style="font-size: 1.15em;">A DeepSeek Harness (DSH) web plugin: a Skill + MCP + CLI manager in one settings page.</b><br /><br />
   <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
-  <a href="https://github.com/zebbkira/dsh-skills-mcp-manager"><img alt="Upstream" src="https://img.shields.io/badge/upstream-YpipaQ%2Fmy--dsh--plugin-4d6bfe" /></a>
+  <a href="https://github.com/zebbkira/dsh-skills-mcp-manager"><img alt="Upstream" src="https://img.shields.io/badge/upstream-zebbkira%2Fdsh--skills--mcp--manager-4d6bfe" /></a>
   <a href="https://github.com/zebbkira/dsh-skills-mcp-manager/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/zebbkira/dsh-skills-mcp-manager" /></a>
   <a href="https://opensource.org/licenses/MIT"><img alt="DSH" src="https://img.shields.io/badge/DSH-0.1.0--rc%2B-4d6bfe" /></a>
 </div>
@@ -42,7 +42,7 @@ One settings page (「Web UI 插件 → 技能中心」) that manages the agent'
 > `cordis.patch.yml`; both break DSH startup.
 
 ```sh
-# From npm (when published): https://www.npmjs.com/package/dsh-skills-mcp-cli-manager
+# From npm (published): https://www.npmjs.com/package/dsh-skills-mcp-cli-manager
 dsh plugin --profile web add dsh-skills-mcp-cli-manager
 # or: npm install dsh-skills-mcp-cli-manager
 
