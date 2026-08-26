@@ -32,6 +32,13 @@
 - **MCP**：表单或 JSON 编辑；**测试连接**（一次性真实探测）；启用 / 禁用真实连接 / 断开并注册 `mcp__<server>__<tool>` 工具；实时状态（连接中 / 运行中 / 失败 / 已停止）；持久化到 `~/.dsh/mcp.json`。
 - **CLI**：自动发现 skill 包装的 CLI（其 `scripts/run-cli.*` / `cli-state.*`，即 tencent-news 模式）；探测是否安装 / 版本 / 需更新 / API-Key 状态（解析 `cli-state` JSON）并列出子命令（解析 `help`）；`~/.dsh/cli.json` 登记系统 CLI（`gh`、`git`、`tencent-news-cli` …），支持启用 / 禁用 / 删除。
 
+## 🖼️ 截图
+
+<div align="center">
+  <img src="./docs/screenshot-settings.png" alt="技能中心 —— CLI 工具页签" width="62%" />
+</div>
+<p align="center"><i>技能中心 —— CLI 工具页签：skill 内嵌的 <code>tencent-news-cli</code> 与系统 CLI <code>gh</code>/<code>git</code>，支持探测 / 启用 / 删除，以及「登记系统 CLI」表单。</i></p>
+
 ## 🚀 安装
 
 > **必须按普通包安装 —— 切勿 junction 链接。** junction 会让依赖（`schemastery` / `react` 等）无法向上解析，并导致包名与 `cordis.patch.yml` 不一致；两者都会让 DSH 启动失败。

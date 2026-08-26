@@ -35,6 +35,13 @@ One settings page (「Web UI 插件 → 技能中心」) that manages the agent'
 - **MCP** — form or JSON editor; **test connection** (one-shot real probe); enable/disable actually connects/disconnects and registers `mcp__<server>__<tool>` tools; live status (`connecting` / `running` / `failed` / `stopped`); persisted to `~/.dsh/mcp.json`.
 - **CLI** — auto-discovers the CLI a skill wraps (its `scripts/run-cli.*` / `scripts/cli-state.*`, the tencent-news pattern); probes whether it is installed / its version / needs-update / API-key state (parsing `cli-state` JSON) and lists its subcommands (from `help`); a `~/.dsh/cli.json` registry for system CLIs (`gh`, `git`, `tencent-news-cli` …) with enable/delete.
 
+## 🖼️ Screenshots
+
+<div align="center">
+  <img src="./docs/screenshot-settings.png" alt="Skills Center — CLI tools tab" width="62%" />
+</div>
+<p align="center"><i>技能中心 (Skills Center) — the CLI tools tab: skill-embedded <code>tencent-news-cli</code> plus system CLIs <code>gh</code>/<code>git</code>, with probe / enable / delete and a "register system CLI" form.</i></p>
+
 ## 🚀 Install
 
 > **Install as a normal package — do NOT link it via a junction.** A junction makes dependencies
