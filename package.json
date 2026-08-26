@@ -4,7 +4,7 @@
     "type": "git",
     "url": "git+https://github.com/YpipaQ/dsh-skills-mcp-cli-manager.git"
   },
-  "description": "Skills, MCP & CLI manager for the dsh web GUI: browse/enable/import/delete skills across project and user roots; manage MCP servers with a REAL connection through @deepseek-ai/dsh-mcp-client (enabled servers connect and register their tools on ctx.tools; enable/disable actually connects/disconnects); and discover/diagnose local CLI tools (skill-embedded run-cli wrappers plus a ~/.dsh/cli.json registry, reporting install/version/update/subcommands/API-key state). Hot-pluggable — mounted via a profile bundle patch + node_modules symlink, no dsh source changes.",
+  "description": "A derived fork of @zebbkira/dsh-skills-mcp-manager (the original Skills & MCP manager) that adds a local-CLI tool layer. Skills, MCP & CLI manager for the dsh web GUI: browse/enable/import/delete skills across project and user roots; manage MCP servers with a REAL connection through @deepseek-ai/dsh-mcp-client (enabled servers connect and register their tools on ctx.tools; enable/disable actually connects/disconnects); and discover/diagnose local CLI tools (skill-embedded run-cli wrappers plus a ~/.dsh/cli.json registry, reporting install/version/update/subcommands/API-key state). Hot-pluggable — mounted via a profile bundle patch + node_modules symlink, no dsh source changes. Original plugin © its author: https://github.com/zebbkira/dsh-skills-mcp-manager",
   "version": "0.1.4",
   "type": "module",
   "engines": {

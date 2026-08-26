@@ -54,4 +54,3 @@ export declare class McpManager {
     /** Build the UI summary list (persisted config + live status). */
     summarize(servers: McpServerConfig[]): McpServerSummary[];
 }
-//# sourceMappingURL=mcp.d.ts.map

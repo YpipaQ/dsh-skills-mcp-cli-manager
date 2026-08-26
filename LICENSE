@@ -1,10 +1,11 @@
 MIT License
 
-Copyright (c) 2026 ze bbkira (@zebbkira / YpipaQ) — upstream dsh-skills-mcp-manager
+Copyright (c) 2026 ze bbkira (@zebbkira) — upstream @zebbkira/dsh-skills-mcp-manager
+Copyright (c) 2026 YpipaQ — dsh-skills-mcp-cli-manager fork additions
 
 This product is a derived fork of third-party open-source code that remains
 copyright its respective original authors (see CREDITS.md):
-  - dsh-skills-mcp-manager  — ze bbkira (@zebbkira) / YpipaQ/my-dsh-plugin (MIT)
+  - @zebbkira/dsh-skills-mcp-manager  — ze bbkira (@zebbkira) / https://github.com/zebbkira/dsh-skills-mcp-manager (MIT)
   - DeepSeek Harness SDK    — @deepseek-ai/dsh-* official packages (MIT)
 
 The CLI layer and the "Skills Center" naming are additions by this fork's author.

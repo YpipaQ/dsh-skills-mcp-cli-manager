@@ -4,7 +4,7 @@
 
 | 包 / 来源 | 吸收了哪些 | 原作者 / 上游仓库 | 许可证 |
 |---|---|---|---|
-| 技能 + MCP 管理器（上游） | `@zebbkira/dsh-skills-mcp-manager` 的全部前端/宿主逻辑与界面 | ze bbkira (@zebbkira) / [YpipaQ/my-dsh-plugin](https://github.com/YpipaQ/my-dsh-plugin) | MIT |
+| 技能 + MCP 管理器（上游） | `@zebbkira/dsh-skills-mcp-manager` 的全部前端/宿主逻辑与界面 | ze bbkira (@zebbkira) / [zebbkira/dsh-skills-mcp-manager](https://github.com/zebbkira/dsh-skills-mcp-manager) | MIT |
 | DeepSeek Harness 官方 SDK | `@deepseek-ai/dsh-settings`、`@deepseek-ai/dsh-mcp-client`、`@deepseek-ai/dsh-tools`、client-runtime 等依赖 | deepseek-ai / [deepseek-ai/deepseek-harness](https://github.com/deepseek-ai/deepseek-harness) | MIT |
 | 其余运行时依赖 | `schemastery`、`react`、`react-dom` | 各原作者 | 各自许可证 |
 

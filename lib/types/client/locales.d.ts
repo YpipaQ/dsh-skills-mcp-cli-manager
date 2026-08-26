@@ -1,5 +1,5 @@
 /**
- * Client locale dictionaries for the dsh-skills-mcp-manager settings card.
+ * Client locale dictionaries for the dsh-skills-mcp-cli-manager settings card.
  * The card chrome is bilingual; the deeper management UI keeps the original
  * Chinese copy inline (see manager.tsx).
  */
@@ -9,4 +9,3 @@ export type SkillsMcpKey = 'title' | 'description' | 'expand' | 'collapse' | 'no
 export declare const zh: Record<SkillsMcpKey, string>;
 /** English dictionary, checked complete against the zh key set. */
 export declare const en: Record<SkillsMcpKey, string>;
-//# sourceMappingURL=locales.d.ts.map

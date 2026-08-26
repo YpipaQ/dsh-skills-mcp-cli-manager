@@ -16,4 +16,3 @@ export type SkillsMcpSectionProps = PropsRuntime<'settings.section'> & PropsLoca
  * @returns the section page.
  */
 export declare function SkillsMcpSection(props: SkillsMcpSectionProps): import("react").JSX.Element;
-//# sourceMappingURL=SettingsCard.d.ts.map

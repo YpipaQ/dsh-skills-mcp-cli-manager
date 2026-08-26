@@ -35,4 +35,3 @@ export declare class SkillsManager {
     /** Import selected skills into ~/.dsh/skills (skip names that already exist). */
     importSkills(items: ImportItem[]): ImportResult[];
 }
-//# sourceMappingURL=skills.d.ts.map

@@ -7,18 +7,19 @@
  * @module
  */
 import type { WebRoute } from '@deepseek-ai/dsh-host-webserver';
+import { CliManager } from './cli.ts';
 import { McpManager } from './mcp.ts';
 import { SkillsManager } from './skills.ts';
 export interface RoutesDeps {
     skills: SkillsManager;
     mcp: McpManager;
+    cli: CliManager;
 }
 /**
  * Build every /api/dsh-skills-mcp route (exact paths).
- * @param deps - skills engine and MCP connection manager.
+ * @param deps - skills engine, MCP connection manager, and CLI manager.
  * @returns the route registrations.
  */
 export declare function makeRoutes(deps: RoutesDeps): {
     routes: WebRoute[];
 };
-//# sourceMappingURL=routes.d.ts.map

@@ -68,6 +68,64 @@ export interface McpServerSummary extends McpServerConfig {
     status: McpConnectionStatus;
     error?: string;
 }
+/** One CLI tool's source: auto-discovered from a skill's wrapper scripts, or a user registry entry. */
+export type CliSource = 'skill' | 'registry';
+/** One local CLI tool as listed in the UI (auto-discovered or registered). */
+export interface CliSummary {
+    /** CLI command name (e.g. `tencent-news-cli`). */
+    name: string;
+    /** Invocation name the agent would run. */
+    command: string;
+    source: CliSource;
+    /** Owning skill name when `source === 'skill'`. */
+    skill?: string;
+    /** Path to the skill's `run-cli` wrapper script, when present. */
+    runScript?: string;
+    /** Path to the skill's `cli-state` probe script, when present. */
+    stateScript?: string;
+    /** Whether the registry/system entry is enabled. */
+    enabled: boolean;
+    /** Whether the executable resolves on PATH (or a known global install dir). */
+    exists: boolean;
+    /** Resolved executable path, when found. */
+    path?: string;
+}
+/** Detailed probe state for one CLI, fetched lazily. */
+export interface CliStateDetail {
+    name: string;
+    exists: boolean;
+    path?: string;
+    version?: string;
+    needUpdate?: boolean;
+    apiKey?: {
+        status?: string;
+        present?: boolean;
+        error?: string;
+    };
+    platform?: {
+        os?: string;
+        arch?: string;
+        cliPath?: string;
+        cliSource?: string;
+    };
+    error?: string;
+}
+/** Parsed `help` output for one CLI: its subcommand list plus raw help text. */
+export interface CliSubcommands {
+    name: string;
+    command: string;
+    subcommands: string[];
+    help: string;
+}
+/** One persisted registry entry (a user-declared CLI the plugin watches). */
+export interface CliRegistryEntry {
+    /** CLI command name (unique). */
+    name: string;
+    /** Invocation name (defaults to `name`). */
+    command: string;
+    /** Master enable flag; a disabled entry is listed but not probed. */
+    enabled?: boolean;
+}
 /** API paths shared by the host routes and the browser api client. */
 export declare const SKILLS_MCP_API: {
     readonly skills: "/api/dsh-skills-mcp/skills";
@@ -81,5 +139,11 @@ export declare const SKILLS_MCP_API: {
     readonly mcpEnabled: "/api/dsh-skills-mcp/mcp/enabled";
     readonly mcpDelete: "/api/dsh-skills-mcp/mcp/delete";
     readonly mcpTest: "/api/dsh-skills-mcp/mcp/test";
+    readonly cli: "/api/dsh-skills-mcp/cli";
+    readonly cliState: "/api/dsh-skills-mcp/cli/state";
+    readonly cliSubcommands: "/api/dsh-skills-mcp/cli/subcommands";
+    readonly cliSave: "/api/dsh-skills-mcp/cli/save";
+    readonly cliEnabled: "/api/dsh-skills-mcp/cli/enabled";
+    readonly cliDelete: "/api/dsh-skills-mcp/cli/delete";
+    readonly cliProbe: "/api/dsh-skills-mcp/cli/probe";
 };
-//# sourceMappingURL=protocol.d.ts.map
