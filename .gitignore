@@ -1,0 +1,25 @@
+# dependencies / build junk (NOT .tgz — we keep the built tarball intentionally)
+node_modules/
+dist/
+build/
+*.log
+*.tsbuildinfo
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# secrets (never commit real tokens/keys)
+.env
+.env.*
+*.key
+token.txt
+.npmrc
+npm-token.txt
+_npmcache/
+
+# git-forge local credential helper
+.git-credentials

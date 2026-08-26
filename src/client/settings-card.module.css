@@ -1,0 +1,196 @@
+/* Skills & MCP manager — settings card + management UI. Theme-agnostic:
+   inherits the shell's text color and uses translucent gray fills. */
+
+.card {
+  border: 1px solid rgba(128, 128, 128, 0.28);
+  background: rgba(128, 128, 128, 0.05);
+  border-radius: 8px;
+  list-style: none;
+  overflow: hidden;
+}
+
+.header {
+  width: 100%;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+}
+.header:hover { background: rgba(128, 128, 128, 0.08); }
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+}
+
+.name {
+  color: inherit;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.description {
+  color: rgba(128, 128, 128, 1);
+  font-size: 12px;
+  line-height: 1.35;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chevron, .chevronOpen {
+  color: rgba(128, 128, 128, 1);
+  flex: none;
+  font-size: 13px;
+  transition: transform 0.12s;
+}
+.chevronOpen { transform: rotate(180deg); }
+
+.body {
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.notExposed, .readOnly, .note { color: rgba(128, 128, 128, 1); font-size: 12px; }
+.error { color: #e5534b; font-size: 12px; }
+
+/* config toggles */
+.config { display: flex; flex-direction: column; gap: 10px; }
+.field { display: flex; flex-direction: column; gap: 3px; }
+.toggle { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.toggle input { cursor: pointer; }
+.toggleLabel { font-size: 13px; font-weight: 600; }
+.hint { color: rgba(128, 128, 128, 1); font-size: 12px; margin: 0; }
+
+/* settings page (first-class section) */
+.sectionPage { display: flex; flex-direction: column; gap: 12px; }
+.pageHeading { margin: 0; font-size: 16px; font-weight: 600; }
+.pageIntro { margin: 0; color: rgba(128, 128, 128, 1); font-size: 13px; }
+
+/* manager */
+.manager { display: flex; flex-direction: column; gap: 14px; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid rgba(128, 128, 128, 0.25); }
+.tab, .tabActive {
+  background: none;
+  border: none;
+  padding: 8px 14px;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+  border-bottom: 2px solid transparent;
+  opacity: 0.7;
+}
+.tabActive { opacity: 1; border-bottom-color: currentColor; font-weight: 600; }
+.disabledBanner {
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid rgba(229, 83, 75, 0.4);
+  border-radius: 8px;
+  color: #e5534b;
+  font-size: 12px;
+}
+
+.panel { display: flex; flex-direction: column; gap: 20px; }
+.section { display: flex; flex-direction: column; gap: 10px; }
+.h { margin: 0; font-size: 14px; font-weight: 600; }
+.hGrow { margin: 0; font-size: 14px; font-weight: 600; flex: 1 1 auto; }
+.groupH { margin: 10px 0 0; font-size: 13px; font-weight: 600; }
+.inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid rgba(128, 128, 128, 0.2);
+  border-radius: 8px;
+}
+.main { flex: 1 1 auto; min-width: 0; }
+.desc { color: rgba(128, 128, 128, 1); font-size: 12px; margin-top: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.badge { font-size: 11px; padding: 1px 8px; border-radius: 999px; background: rgba(128, 128, 128, 0.15); white-space: nowrap; }
+.status { font-size: 11px; color: rgba(128, 128, 128, 1); }
+
+.switch { display: flex; align-items: center; gap: 6px; font-size: 12px; white-space: nowrap; }
+.switch input { cursor: pointer; }
+
+.btn {
+  font: inherit;
+  font-size: 12px;
+  padding: 4px 10px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn:hover { background: rgba(128, 128, 128, 0.1); }
+.btn:disabled { opacity: 0.5; cursor: default; }
+.btnActive { background: rgba(128, 128, 128, 0.15); }
+.btnPrimary { border-color: currentColor; font-weight: 600; }
+.btnDanger { color: #e5534b; border-color: rgba(229, 83, 75, 0.4); }
+
+.detail {
+  margin: 4px 0 0 0;
+  padding: 10px;
+  border: 1px solid rgba(128, 128, 128, 0.15);
+  border-radius: 8px;
+  background: rgba(128, 128, 128, 0.04);
+}
+.pre {
+  margin: 8px 0 0;
+  padding: 8px;
+  border-radius: 6px;
+  background: rgba(128, 128, 128, 0.08);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 320px;
+  overflow: auto;
+}
+.scanList { display: flex; flex-direction: column; gap: 8px; }
+
+.input, .inputGrow, .inputMono {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  box-sizing: border-box;
+  width: 100%;
+}
+.inputGrow { flex: 1 1 auto; width: auto; min-width: 240px; }
+.inputMono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.filterSelect {
+  font: inherit;
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid rgba(128, 128, 128, 0.35);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  width: auto;
+  flex: 0 0 auto;
+}
+textarea.input { resize: vertical; }
+
+.form { display: flex; flex-direction: column; gap: 10px; }
+.fieldLabel { display: flex; flex-direction: column; gap: 4px; }
+.fieldName { font-size: 12px; color: rgba(128, 128, 128, 1); }

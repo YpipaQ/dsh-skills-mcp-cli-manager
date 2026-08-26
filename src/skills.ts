@@ -1,0 +1,271 @@
+/**
+ * Skills filesystem engine — scans the four manageable skill roots, parses
+ * SKILL.md frontmatter, and performs enable/disable (frontmatter rewrite),
+ * delete, scan-for-import, and import. Runs in the Host process with direct
+ * node:fs access (a real npm package no longer needs the shell+node hack the
+ * dynamic plugin used).
+ * @module
+ */
+
+import { copyFileSync, cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs'
+import { homedir } from 'node:os'
+import { dirname, join, resolve } from 'node:path'
+import type { ImportItem, ImportResult, ScannedSkill, SkillDetail, SkillLevel, SkillSource, SkillSummary } from './protocol.ts'
+
+/** User-level skill roots (project roots are derived from the workspace cwd). */
+export interface SkillRoots {
+  home: string
+  dshHome: string
+  agentsHome: string
+  userSkillsDir: string
+  agentsSkillsDir: string
+}
+
+function dshHomeDir(): string {
+  return process.env.DSH_HOME || join(homedir(), '.dsh')
+}
+function agentsHomeDir(): string {
+  return process.env.DSH_AGENTS_HOME || join(homedir(), '.agents')
+}
+
+/** Resolve (and materialize) the user-level skill roots. */
+export function getRoots(): SkillRoots {
+  const home = homedir()
+  const dshHome = dshHomeDir()
+  const agentsHome = agentsHomeDir()
+  const userSkillsDir = join(dshHome, 'skills')
+  mkdirSync(userSkillsDir, { recursive: true })
+  return { home, dshHome, agentsHome, userSkillsDir, agentsSkillsDir: join(agentsHome, 'skills') }
+}
+
+/** Walk up from cwd to the nearest .git directory (the project root). */
+export function findProjectRoot(cwd?: string): string {
+  let dir = resolve(cwd ?? process.cwd())
+  for (let i = 0; i < 100; i++) {
+    if (existsSync(join(dir, '.git'))) break
+    const parent = dirname(dir)
+    if (parent === dir) break
+    dir = parent
+  }
+  return dir
+}
+
+function levelOf(source: SkillSource): SkillLevel {
+  return source === 'project-dsh' || source === 'project-agents' ? 'project' : 'user'
+}
+
+function scalarValue(v: string): unknown {
+  if (v === 'true' || v === 'True' || v === 'TRUE') return true
+  if (v === 'false' || v === 'False' || v === 'FALSE') return false
+  if (v === 'null' || v === '~') return null
+  if (/^-?\d+$/.test(v)) return parseInt(v, 10)
+  return v
+}
+
+function parseBool(v: unknown): boolean | undefined {
+  if (v === true || v === 1 || v === '1') return true
+  if (v === false || v === 0 || v === '0') return false
+  if (typeof v === 'string') {
+    const s = v.toLowerCase()
+    if (s === 'true' || s === 'yes' || s === 'on') return true
+    if (s === 'false' || s === 'no' || s === 'off') return false
+  }
+  return undefined
+}
+
+interface Frontmatter { data: Record<string, unknown>; body: string }
+
+/** Parse a YAML-style frontmatter block; null when absent or malformed. */
+function parseFrontmatter(raw: string): Frontmatter | null {
+  const lines = raw.split(/\r?\n/)
+  if (lines.length === 0 || lines[0].trim() !== '---') return null
+  let closeIdx = -1
+  for (let i = 1; i < lines.length; i++) {
+    if (lines[i].trim() === '---') { closeIdx = i; break }
+  }
+  if (closeIdx < 0) return null
+  const data: Record<string, unknown> = {}
+  for (let i = 1; i < closeIdx; i++) {
+    const line = lines[i]
+    const colon = line.indexOf(':')
+    if (colon < 0) continue
+    const key = line.slice(0, colon).trim()
+    let val = line.slice(colon + 1).trim()
+    if (val.length >= 2 && ((val[0] === '"' && val[val.length - 1] === '"') || (val[0] === "'" && val[val.length - 1] === "'"))) {
+      val = val.slice(1, -1)
+    }
+    data[key] = scalarValue(val)
+  }
+  const body = lines.slice(closeIdx + 1).join('\n')
+  return { data, body }
+}
+
+interface ParsedSkill { name: string; description: string; whenToUse: string; enabled: boolean; content: string }
+
+/** Parse one skill document; null when it lacks a name/description. */
+function parseSkillFile(raw: string): ParsedSkill | null {
+  const fm = parseFrontmatter(raw)
+  if (fm === null) return null
+  const name = typeof fm.data.name === 'string' ? fm.data.name : ''
+  const description = typeof fm.data.description === 'string' ? fm.data.description : ''
+  if (name === '' || description === '') return null
+  const whenToUse = typeof fm.data.whenToUse === 'string' ? fm.data.whenToUse : ''
+  const disableModel = parseBool(fm.data['disable-model-invocation'])
+  const userInvocable = parseBool(fm.data['user-invocable'])
+  return {
+    name,
+    description,
+    whenToUse,
+    enabled: (disableModel !== true) || (userInvocable !== false),
+    content: fm.body.trim(),
+  }
+}
+
+/** Rewrite the frontmatter to add/remove the disable-model-invocation pair. */
+function toggleInvocation(raw: string, enabled: boolean): string {
+  const lines = raw.split(/\r?\n/)
+  if (lines.length === 0 || lines[0].trim() !== '---') return raw
+  let closeIdx = -1
+  for (let i = 1; i < lines.length; i++) { if (lines[i].trim() === '---') { closeIdx = i; break } }
+  if (closeIdx < 0) return raw
+  const kept = lines.slice(1, closeIdx).filter((l) => {
+    return !/^\s*(disable-model-invocation|disableModelInvocation|modelInvocable|user-invocable|userInvocable)\s*:/.test(l)
+  })
+  if (!enabled) { kept.push('disable-model-invocation: true'); kept.push('user-invocable: false') }
+  return [lines[0]].concat(kept, lines.slice(closeIdx)).join('\n')
+}
+
+export class SkillsManager {
+  /** Scan one skill root directory into SkillSummary records. */
+  scanRoot(dir: string, source: SkillSource): SkillSummary[] {
+    const items: SkillSummary[] = []
+    if (!existsSync(dir)) return items
+    let entries
+    try { entries = readdirSync(dir, { withFileTypes: true }) } catch { return items }
+    for (const entry of entries) {
+      const name = entry.name
+      if (!name || name === '.system' || name[0] === '.') continue
+      if (entry.isDirectory()) {
+        const mdPath = join(dir, name, 'SKILL.md')
+        if (!existsSync(mdPath)) continue
+        let raw: string
+        try { raw = readFileSync(mdPath, 'utf8') } catch { continue }
+        const parsed = parseSkillFile(raw)
+        if (parsed === null) continue
+        items.push({ ...parsed, source, level: levelOf(source), kind: 'bundle', path: mdPath })
+      } else if (entry.isFile() && name.endsWith('.md')) {
+        const filePath = join(dir, name)
+        let raw: string
+        try { raw = readFileSync(filePath, 'utf8') } catch { continue }
+        const parsed = parseSkillFile(raw)
+        if (parsed === null) continue
+        items.push({ ...parsed, source, level: levelOf(source), kind: 'file', path: filePath })
+      }
+    }
+    return items
+  }
+
+  /** List skills across project and/or user roots, de-duplicated by path. */
+  listSkills(cwd?: string): SkillSummary[] {
+    const roots = getRoots()
+    const scans: Array<{ path: string; source: SkillSource }> = []
+    if (cwd) {
+      const projectRoot = findProjectRoot(cwd)
+      scans.push(
+        { path: join(projectRoot, '.dsh', 'skills'), source: 'project-dsh' },
+        { path: join(projectRoot, '.agents', 'skills'), source: 'project-agents' },
+        { path: roots.userSkillsDir, source: 'user-dsh' },
+        { path: roots.agentsSkillsDir, source: 'user-agents' },
+      )
+    } else {
+      scans.push(
+        { path: roots.userSkillsDir, source: 'user-dsh' },
+        { path: roots.agentsSkillsDir, source: 'user-agents' },
+      )
+    }
+    const seen = new Set<string>()
+    const items: SkillSummary[] = []
+    for (const s of scans) {
+      for (const it of this.scanRoot(s.path, s.source)) {
+        if (seen.has(it.path)) continue
+        seen.add(it.path)
+        items.push(it)
+      }
+    }
+    items.sort((a, b) => {
+      if (a.level !== b.level) return a.level === 'project' ? -1 : 1
+      return a.name < b.name ? -1 : a.name > b.name ? 1 : 0
+    })
+    return items
+  }
+
+  /** Read one skill document (body included). */
+  readSkill(path: string): SkillDetail | null {
+    if (!existsSync(path)) return null
+    const raw = readFileSync(path, 'utf8')
+    const parsed = parseSkillFile(raw)
+    if (parsed === null) return null
+    return { ...parsed, path }
+  }
+
+  /** Enable/disable a skill by rewriting its frontmatter invocation flags. */
+  setSkillEnabled(path: string, enabled: boolean): void {
+    const raw = readFileSync(path, 'utf8')
+    const next = toggleInvocation(raw, enabled)
+    writeFileSync(path, next, 'utf8')
+  }
+
+  /** Delete a skill (the whole bundle directory, or the flat .md file). */
+  deleteSkill(path: string, kind: 'bundle' | 'file'): string {
+    const target = kind === 'bundle' ? dirname(path) : path
+    rmSync(target, { recursive: true, force: true })
+    return target
+  }
+
+  /** Scan an arbitrary directory for importable skills. */
+  scanSkills(dir: string): ScannedSkill[] {
+    if (!existsSync(dir)) throw new Error('directory not found: ' + dir)
+    const entries = readdirSync(dir, { withFileTypes: true })
+    const items: ScannedSkill[] = []
+    for (const entry of entries) {
+      const name = entry.name
+      if (!name || name[0] === '.') continue
+      if (entry.isDirectory()) {
+        const mdPath = join(dir, name, 'SKILL.md')
+        if (!existsSync(mdPath)) continue
+        let raw: string
+        try { raw = readFileSync(mdPath, 'utf8') } catch { continue }
+        const parsed = parseSkillFile(raw)
+        if (parsed !== null) items.push({ name: parsed.name, description: parsed.description, sourcePath: join(dir, name), kind: 'bundle' })
+      } else if (entry.isFile() && name.endsWith('.md') && name !== 'SKILL.md') {
+        let raw: string
+        try { raw = readFileSync(join(dir, name), 'utf8') } catch { continue }
+        const parsed = parseSkillFile(raw)
+        if (parsed !== null) items.push({ name: parsed.name, description: parsed.description, sourcePath: join(dir, name), kind: 'file' })
+      }
+    }
+    return items
+  }
+
+  /** Import selected skills into ~/.dsh/skills (skip names that already exist). */
+  importSkills(items: ImportItem[]): ImportResult[] {
+    const destDir = getRoots().userSkillsDir
+    mkdirSync(destDir, { recursive: true })
+    const results: ImportResult[] = []
+    for (const it of items) {
+      const base = join(destDir, it.sourcePath.split(/[\\/]/).pop() || '')
+      if (existsSync(base)) {
+        results.push({ name: base, ok: false, reason: 'already exists' })
+        continue
+      }
+      try {
+        if (it.kind === 'bundle') cpSync(it.sourcePath, base, { recursive: true })
+        else copyFileSync(it.sourcePath, base)
+        results.push({ name: base, ok: true })
+      } catch (e) {
+        results.push({ name: base, ok: false, reason: String((e as Error)?.message ?? e) })
+      }
+    }
+    return results
+  }
+}
