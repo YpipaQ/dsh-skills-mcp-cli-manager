@@ -10,7 +10,7 @@
   <a href="https://opensource.org/licenses/MIT"><img alt="DSH" src="https://img.shields.io/badge/DSH-0.1.0--rc%2B-4d6bfe" /></a>
 </div>
 
-# @zebbkira/dsh-skills-mcp-manager
+# dsh-skills-mcp-manager
 
 > **技能中心** —— 一个自包含的 DSH Web 插件，在设置页新增一个一级页面，统一管理 agent 的**三类工具**：**技能（Skills）/ MCP 服务器 / 本地 CLI 工具**。
 >
@@ -37,9 +37,9 @@
 > **必须按普通包安装 —— 切勿 junction 链接。** junction 会让依赖（`schemastery` / `react` 等）无法向上解析，并导致包名与 `cordis.patch.yml` 不一致；两者都会让 DSH 启动失败。
 
 ```sh
-# 从 npm 安装（发布后）：https://www.npmjs.com/package/@zebbkira/dsh-skills-mcp-manager
-dsh plugin --profile web add @zebbkira/dsh-skills-mcp-manager
-# 或：npm install @zebbkira/dsh-skills-mcp-manager
+# 从 npm 安装（发布后）：https://www.npmjs.com/package/dsh-skills-mcp-manager
+dsh plugin --profile web add dsh-skills-mcp-manager
+# 或：npm install dsh-skills-mcp-manager
 
 # 从源码（本仓库 / 克隆后）
 dsh plugin --profile web add <本文件夹绝对路径>

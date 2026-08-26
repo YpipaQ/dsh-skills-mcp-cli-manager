@@ -1,4 +1,4 @@
-# @zebbkira/dsh-skills-mcp-manager — AGENTS.md
+# dsh-skills-mcp-manager — AGENTS.md
 
 > Guidance for AI agents / contributors working in this repository.
 
@@ -44,13 +44,13 @@ dsh-skills-mcp-manager/
 
 - **Do NOT modify DeepSeek Harness (DSH) source.** Never write to `~/.dsh/source/current` or commit harness changes. The plugin is always a package the profile references.
 - **Install as a normal package, not a junction.** A junction breaks Node dependency resolution (the plugin's deps like `schemastery`/`react` fail to resolve upward) and desyncs the package name from `cordis.patch.yml`. Install via `dsh plugin --profile <name> add <path>` or `file:<tarball>`.
-- **The package name must match `cordis.patch.yml`'s `name`** (`@zebbkira/dsh-skills-mcp-manager`). Do not rename one without the other, or DSH boot fails with `Cannot find package ...`.
+- **The package name must match `cordis.patch.yml`'s `name`** (`dsh-skills-mcp-manager`). Do not rename one without the other, or DSH boot fails with `Cannot find package ...`.
 - `lib/` is the shipped artifact. It is **built from `src/`** (this repo has a source tree). To change behavior, edit `src/*`, then rebuild (`pnpm exec tsdown`) and commit the regenerated `lib/`.
 - The **host half** registers the `/api/dsh-skills-mcp/*` route family on the loopback-only `webServer`; the **client half** registers the settings page. Keep the shared `SKILLS_MCP_API` path constants in `src/protocol.ts` as the single source of truth for both halves.
 
 ## Typical dev flow
 
-- **Install from npm (published)**: `dsh plugin --profile web add @zebbkira/dsh-skills-mcp-manager` (or `npm install @zebbkira/dsh-skills-mcp-manager`), then restart DSH + hard-refresh the browser.
+- **Install from npm (published)**: `dsh plugin --profile web add dsh-skills-mcp-manager` (or `npm install dsh-skills-mcp-manager`), then restart DSH + hard-refresh the browser.
 - **Install from source**: `dsh plugin --profile web add <abs path>` (local dir / tarball), then restart DSH + hard-refresh.
 - **Build**: 
   ```sh

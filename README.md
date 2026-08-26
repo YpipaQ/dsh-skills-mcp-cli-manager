@@ -10,7 +10,7 @@
   <a href="https://opensource.org/licenses/MIT"><img alt="DSH" src="https://img.shields.io/badge/DSH-0.1.0--rc%2B-4d6bfe" /></a>
 </div>
 
-# @zebbkira/dsh-skills-mcp-manager
+# dsh-skills-mcp-manager
 
 > **Skills Center** — a self-contained DSH web plugin that adds a first-class **settings page** for the
 > three agent tool families: **Skills**, **MCP servers**, and **local CLI tools**.
@@ -42,9 +42,9 @@ One settings page (「Web UI 插件 → 技能中心」) that manages the agent'
 > `cordis.patch.yml`; both break DSH startup.
 
 ```sh
-# From npm (when published): https://www.npmjs.com/package/@zebbkira/dsh-skills-mcp-manager
-dsh plugin --profile web add @zebbkira/dsh-skills-mcp-manager
-# or: npm install @zebbkira/dsh-skills-mcp-manager
+# From npm (when published): https://www.npmjs.com/package/dsh-skills-mcp-manager
+dsh plugin --profile web add dsh-skills-mcp-manager
+# or: npm install dsh-skills-mcp-manager
 
 # From source (this repo / after cloning)
 dsh plugin --profile web add <absolute path to this folder>

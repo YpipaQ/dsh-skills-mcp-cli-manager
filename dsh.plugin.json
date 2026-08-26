@@ -1,5 +1,5 @@
 {
-  "id": "skills-mcp-manager",
+  "id": "dsh-skills-mcp-manager",
   "version": "0.1.4",
   "main": "./lib/index.js",
   "description": "DSH web plugin: a Skills + MCP + CLI manager in one settings page (Skills Center). Skills CRUD across project/user roots, real @deepseek-ai/dsh-mcp-client MCP connections, and local CLI tool discovery/diagnostics (MIT).",

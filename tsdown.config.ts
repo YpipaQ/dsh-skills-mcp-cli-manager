@@ -146,7 +146,7 @@ function clientConfig(id: string): UserConfig {
   }
 }
 
-const ID = '@zebbkira/dsh-skills-mcp-manager'
+const ID = 'dsh-skills-mcp-manager'
 
 /** tsdown entry: build both halves in one run (single default face). */
 export default (_inlineConfig: Pick<UserConfig, 'env'>): UserConfig[] => {
