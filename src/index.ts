@@ -8,7 +8,7 @@
  */
 
 import type { Context } from '@deepseek-ai/cordis'
-import { installSettingsSection, settingsNamespace } from '@deepseek-ai/dsh-settings'
+import type {} from '@deepseek-ai/dsh-settings'
 import z from 'schemastery'
 import type {} from '@deepseek-ai/dsh-host-webserver'
 import type {} from '@deepseek-ai/dsh-system-prompt'
@@ -22,16 +22,18 @@ import { SkillsManager } from './skills.ts'
 export const name = 'skills-mcp-manager'
 
 /** Services required before the surfaces can mount. `settings` is
- * deliberately absent: installSettingsSection registers it on an inner scoped
- * fiber, so a deployment without the settings surface still gets routes + MCP. */
+ * deliberately absent: the config section is installed through
+ * `ctx.inject(['settings'], ...)` (new `SettingsProvider.installSection`
+ * API), so a deployment without the settings surface still gets routes + MCP. */
 export const inject = ['webServer', 'tools', 'systemPrompt']
 
 /**
  * Settings namespace this plugin's config lives under. Spelled here rather
  * than imported: the browser half spells the same value and must not depend
- * on a Host package.
+ * on a Host package. (Plain lowercase-kebab string — the `settingsNamespace()`
+ * branding helper was removed in DSH 0.1.2-alpha.2's `@deepseek-ai/dsh-settings`.)
  */
-export const SKILLS_MCP_NAMESPACE = settingsNamespace('skills-mcp-manager')
+export const SKILLS_MCP_NAMESPACE = 'skills-mcp-manager'
 
 /** Plugin config, validated by the same-named schemastery schema. */
 export interface Config {
@@ -108,12 +110,19 @@ export function apply(ctx: Context, config?: Config): void {
     void mcp.reload()
   }
 
-  installSettingsSection(ctx, SKILLS_MCP_NAMESPACE, Config, config ?? {}, {
-    setSource: (source) => {
-      current = source
-      sync()
-    },
-    onChange: sync,
+  // Attach the optional settings section (DSH 0.1.2-alpha.2 API: the old
+  // standalone `installSettingsSection` was folded into the provider's
+  // `installSection` instance method). `ctx.inject` keeps `settings` optional:
+  // a deployment without the settings surface still runs routes + MCP, with
+  // the composition entry (`config ?? {}`) as the authoritative config.
+  ctx.inject(['settings'], (settingsCtx) => {
+    settingsCtx.settings.installSection(ctx, SKILLS_MCP_NAMESPACE, Config, config ?? {}, {
+      setSource: (source) => {
+        current = source
+        sync()
+      },
+      onChange: sync,
+    })
   })
 
   // Teardown every MCP connection when the plugin unloads.

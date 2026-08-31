@@ -18,18 +18,16 @@ export type SkillsMcpSectionProps =
 
 /**
  * Render the settings section content.
- * @param props - locale copy, the shell's close action, and the picker helper.
+ * @param props - locale copy, the global useWorkspaces hook, and the picker helper.
  * @returns the section page.
  */
 export function SkillsMcpSection(props: SkillsMcpSectionProps) {
   const { t } = props
 
-  // Current workspace path → project-level skills root.
-  const cwd = props.useWorkspaces((s) => {
-    const items = (s && s.items) || []
-    const ws = items.find((w) => w.workspaceId === s.recentWorkspaceId) || items[0]
-    return ws ? ws.path : ''
-  })
+  // Current workspace path → project-level skills root. The alpha.2
+  // WorkspaceSnapshot dropped the rc-era `recentWorkspaceId` marker; the
+  // workspace list is Host-ordered, so the first row is the sensible default.
+  const cwd = props.useWorkspaces((s) => s.items[0]?.path ?? '')
 
   return (
     <div className={css.sectionPage}>
